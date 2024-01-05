@@ -79,7 +79,7 @@ const menuItems = [
 
 const Sidebar = () => {
   return (
-    <div className='sticky top-10'>
+    <div className='sticky top-10 p-5'>
       <div className='flex items-center gap-5 mb-5'>
         <Image
           src=''
@@ -97,13 +97,23 @@ const Sidebar = () => {
       <ul>
         {menuItems.map((cat) => (
           <li key={cat.title}>
-            <span className='text-textSoft font-bold text-[13px] py-[10px]'>{cat.title}</span>
+            <span className='text-textSoft font-bold text-[13px] py-[10px]'>
+              {cat.title}
+            </span>
             {cat.list.map((item) => (
               <MenuLink {...item} key={item.title} />
             ))}
           </li>
         ))}
       </ul>
+
+      <button
+        className='p-5 mx-[5px] flex items-center gap-[10px] cursor-pointer
+       rounded-[10px] bg-transparent w-full hover:bg-[#2e374a]'
+      >
+        <MdLogout />
+        Logout
+      </button>
     </div>
   );
 };
