@@ -15,6 +15,7 @@ const config: Config = {
       },
       colors: {
         bg: '#151c2c',
+        hoverbg:'#2e374a',
         bgSoft: '#182237',
         text: 'white',
         textSoft: '#b7bac1',
