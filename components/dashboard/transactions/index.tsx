@@ -17,7 +17,7 @@ const Transactions = () => {
           <tr>
             <td className='flex items-center gap-[10px]'>
               <Image
-                src=''
+                src='/noavatar.png'
                 alt=''
                 width={40}
                 height={40}
@@ -27,7 +27,7 @@ const Transactions = () => {
             </td>
 
             <td>
-              <span className='rounded-[5px] p-[5px] text-[14px] text-white'>Pending</span>
+              <span className='status pending'>Pending</span>
             </td>
             <td>14.02.2024</td>
             <td>$3.200</td>
@@ -35,12 +35,18 @@ const Transactions = () => {
 
           <tr>
             <td>
-              <Image src='' alt='' width={40} height={40} className='' />
+              <Image
+                src='/noavatar.png'
+                alt=''
+                width={40}
+                height={40}
+                className=''
+              />
               John Doe
             </td>
 
             <td>
-              <span className=''>Done</span>
+              <span className='status done'>Done</span>
             </td>
             <td>14.02.2024</td>
             <td>$3.200</td>
@@ -48,12 +54,18 @@ const Transactions = () => {
 
           <tr>
             <td>
-              <Image src='' alt='' width={40} height={40} className='' />
+              <Image
+                src='/noavatar.png'
+                alt=''
+                width={40}
+                height={40}
+                className=''
+              />
               John Doe
             </td>
 
             <td>
-              <span className=''>Cancelled</span>
+              <span className='status cancelled'>Cancelled</span>
             </td>
             <td>14.02.2024</td>
             <td>$3.200</td>
@@ -61,7 +73,13 @@ const Transactions = () => {
 
           <tr>
             <td>
-              <Image src='' alt='' width={40} height={40} className='' />
+              <Image
+                src='/noavatar.png'
+                alt=''
+                width={40}
+                height={40}
+                className=''
+              />
               John Doe
             </td>
 
@@ -74,7 +92,13 @@ const Transactions = () => {
 
           <tr>
             <td>
-              <Image src='' alt='' width={40} height={40} className='' />
+              <Image
+                src='/noavatar.png'
+                alt=''
+                width={40}
+                height={40}
+                className=''
+              />
               John Doe
             </td>
 
