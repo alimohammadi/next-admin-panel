@@ -1,4 +1,4 @@
-import { Navbar, Sidebar } from '@/components';
+import { Footer, Navbar, Sidebar } from '@/components';
 import React, { ReactNode } from 'react';
 
 interface Props {
@@ -15,6 +15,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       <div className='flex-[4] p-5'>
         <Navbar />
         {children}
+        <Footer />
       </div>
     </div>
   );
