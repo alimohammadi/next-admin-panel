@@ -1,9 +1,22 @@
-import React from 'react'
+'use client';
+import React, { useState } from 'react';
+import Pagination from './Pagination';
 
 const Table = () => {
-  return (
-    <div>Table</div>
-  )
-}
+  const [currentPage, setCurrentPage] = useState(2);
 
-export default Table
+  return (
+    <div>
+      Table
+      <Pagination
+        onPageChange={(pageNum) => setCurrentPage(pageNum)}
+        totalCount={200}
+        siblingCount={1}
+        currentPage={currentPage}
+        pageSize={20}
+      />
+    </div>
+  );
+};
+
+export default Table;
