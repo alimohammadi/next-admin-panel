@@ -8,6 +8,7 @@ import {
   MdPublic,
   MdSearch,
 } from 'react-icons/md';
+import SearchBar from '../searchBar';
 
 const Navbar = () => {
   const pathName = usePathname();
@@ -18,14 +19,7 @@ const Navbar = () => {
         {pathName.split('/').pop()}
       </div>
       <div className='flex items-center gap-x-5'>
-        <div className='flex items-center gap-x-[10px] bg-[#2e374a] p-[10px] rounded-[10px]'>
-          <MdSearch />
-          <input
-            type='text'
-            placeholder='Search...'
-            className='bg-transparent border-none outline-none text-text'
-          />
-        </div>
+        <SearchBar placeholder='Search...' />
 
         <div className='flex items-center gap-x-5'>
           <MdOutlineChat size={20} />
