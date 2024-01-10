@@ -57,9 +57,7 @@ const Pagination = (props: PaginationProps) => {
         // Render our Page Pills
         <li
           className={`text-[12px] text-white cursor-pointer w-8 h-8 flex items-center justify-center p-2 rounded-full ${
-            pageNumber === currentPage
-              ? 'bg-hoverbg'
-              : 'bg-white/20'
+            pageNumber === currentPage ? 'bg-hoverbg' : 'bg-white/20'
           }`}
           onClick={() => onPageChange(pageNumber)}
         >
