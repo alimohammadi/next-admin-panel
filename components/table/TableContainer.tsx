@@ -1,4 +1,13 @@
 import React from 'react';
+
+const tableColConfig = [
+  { id: 0, title: '_id', value: '_id', width: '100px' },
+  { id: 1, title: 'phoneNumber', value: 'phoneNumber', width: '100px' },
+  { id: 2, title: 'amount', value: 'amount', width: '100px' },
+  { id: 3, title: 'payed', value: 'payed', width: '100px' },
+  { id: 4, title: 'createdAt', value: 'createdAt', width: '100px' },
+];
+
 const tableData = [
   {
     _id: '65004fef2add3e275fd79b75',
@@ -34,8 +43,26 @@ const TableContainer = () => {
   // onMouseDown={() => {}}
   // onTouchStart={() => {}}
   return (
-    <table>
-      <thead></thead>
+    <table className='w-full'>
+      <thead>
+        <tr>
+          {tableColConfig.map((config) => (
+            <th key={config.id}>{config.title}</th>
+          ))}
+        </tr>
+      </thead>
+
+      <tbody className='w-full'>
+        {tableData.map((data: any, indx: number) => (
+          <tr key={indx}>
+            {Object.keys(data).map((key) => (
+              <td key={key} className='text-center'>
+                {data[key]}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
     </table>
   );
 };
