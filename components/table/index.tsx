@@ -1,13 +1,14 @@
 'use client';
 import React, { useState } from 'react';
-import Pagination from './Pagination';
+import Pagination from './pagination';
+import TableContainer from './TableContainer';
 
 const Table = () => {
   const [currentPage, setCurrentPage] = useState(2);
 
   return (
     <div>
-      Table
+      <TableContainer />
       <Pagination
         onPageChange={(pageNum) => setCurrentPage(pageNum)}
         totalCount={200}
