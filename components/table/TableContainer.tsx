@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { FaArrowsAltH } from 'react-icons/fa';
 
 const tableColConfig = [
-  { id: 0, title: '_id', value: '_id', width: '100px' },
+  { id: 0, title: '_id', value: '_id', width: '400px' },
   { id: 1, title: 'phoneNumber', value: 'phoneNumber', width: '100px' },
   { id: 2, title: 'amount', value: 'amount', width: '100px' },
   { id: 3, title: 'payed', value: 'payed', width: '100px' },
@@ -40,14 +41,86 @@ const tableData = [
 ];
 
 const TableContainer = () => {
+  const elementRef = useRef<Array<HTMLDivElement | null>>([]);
+  const intervalRef = useRef<number | null>(null);
+  const cursorRef = useRef<HTMLDivElement | null>(null);
+
   // onMouseDown={() => {}}
   // onTouchStart={() => {}}
+  const handleMouseDown = (index: number, e: any) => {
+    const clickedElementRef = elementRef.current[index];
+
+    if (clickedElementRef) {
+      const elementRect = elementRef.current[index]?.getBoundingClientRect();
+
+      // const clickDistanceFromLeft = e.pageX - elementRect.left;
+
+      console.log(
+        'Mouse click distance from the left edge:',
+        e.pageX,
+        elementRect?.left,
+        elementRect?.width
+      );
+    }
+  };
+
+  const startContinuousFunction = (index: number, e: any) => {
+    // const clickDistanceFromLeft = e.pageX - elementRect.left;
+    const elementRect = elementRef.current[index]?.getBoundingClientRect();
+
+    if (elementRect) {
+      const cursorDistanceFromLeft = e.pageX - elementRect?.left;
+      const cursorDistanceFromRight =
+        elementRect?.width - cursorDistanceFromLeft;
+
+      if (cursorDistanceFromLeft <= 2)
+        cursorRef.current?.classList.add('resize_icon_left');
+      else if (cursorDistanceFromRight <= 2)
+        cursorRef.current?.classList.add('resize_icon_right');
+      else
+        cursorRef.current?.classList.remove(
+          'resize_icon_left',
+          'resize_icon_right'
+        );
+
+      // console.log(
+      //   'Mouse click distance from the left edge:',
+      //   cursorDistanceFromLeft,
+      //   elementRect?.width
+      // );
+    }
+  };
+
+  const stopContinuousFunction = () => {
+    // Stop the continuous function when mouse is released
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
   return (
     <table className='w-full'>
+      <div className='custom-cursor' ref={cursorRef}>
+        <FaArrowsAltH />
+      </div>
       <thead>
-        <tr>
-          {tableColConfig.map((config) => (
-            <th key={config.id}>{config.title}</th>
+        <tr className=''>
+          {tableColConfig.map((config, indx) => (
+            <th style={{ width: config.width }} className='' key={config.id}>
+              {config.title}
+              <div
+                dir='ltr'
+                id='elem'
+                ref={(el) => (elementRef.current[indx] = el)}
+                onMouseDown={(e) => startContinuousFunction(indx, e)}
+                onMouseUp={stopContinuousFunction}
+                onMouseMove={(e) => startContinuousFunction(indx, e)}
+                className='w-[80%] relative mx-auto h-full bg-red-300'
+              >
+                mmm
+              </div>
+            </th>
           ))}
         </tr>
       </thead>

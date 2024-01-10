@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Pagination from './pagination';
 import TableContainer from './TableContainer';
+import './style.css';
 
 const Table = () => {
   const [currentPage, setCurrentPage] = useState(2);
