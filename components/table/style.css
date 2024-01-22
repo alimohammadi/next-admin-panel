@@ -1,6 +1,8 @@
 .resize_icon_left {
-  background-color: red;
+  /* background-color: red; */
+  @apply -left-[9px] cursor-none block;
 }
 .resize_icon_right {
-  background-color: blue;
+  /* background-color: blue; */
+  @apply -right-[9px] cursor-none block;
 }

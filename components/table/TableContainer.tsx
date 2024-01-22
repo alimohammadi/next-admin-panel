@@ -1,132 +1,147 @@
-import React, { useRef } from 'react';
+import React, { MouseEventHandler, useCallback, useRef, useState } from 'react';
 import { FaArrowsAltH } from 'react-icons/fa';
 
-const tableColConfig = [
-  { id: 0, title: '_id', value: '_id', width: '400px' },
-  { id: 1, title: 'phoneNumber', value: 'phoneNumber', width: '100px' },
-  { id: 2, title: 'amount', value: 'amount', width: '100px' },
-  { id: 3, title: 'payed', value: 'payed', width: '100px' },
-  { id: 4, title: 'createdAt', value: 'createdAt', width: '100px' },
-];
+interface TableContainerProps {
+  tableHeaderConfig: Array<{
+    id: number;
+    title: string;
+    value: string;
+    width: string;
+  }>;
+  tableData: any;
+}
 
-const tableData = [
-  {
-    _id: '65004fef2add3e275fd79b75',
-    phoneNumber: '09045292582',
-    amount: 10000,
-    payed: true,
-    createdAt: '2023-09-12T11:47:59.581Z',
-  },
-  {
-    _id: '650164813fbdd79915f0566b',
-    phoneNumber: '09128995907',
-    amount: 10000,
-    payed: true,
-    createdAt: '2023-09-13T07:28:01.390Z',
-  },
-  {
-    _id: '6501677292f0834f92821f52',
-    phoneNumber: '09128995907',
-    amount: 10000,
-    payed: true,
-    createdAt: '2023-09-13T07:40:34.603Z',
-  },
-  {
-    _id: '65030382b8560a389ac48a3f',
-    phoneNumber: '09045292582',
-    amount: 10000,
-    payed: true,
-    createdAt: '2023-09-14T12:58:42.516Z',
-  },
-];
+type SortOrder = 'ascn' | 'desc';
 
-const TableContainer = () => {
+const sortData = ({
+  tableData,
+  sortKey,
+  reverse,
+}: {
+  tableData: Array<any>;
+  sortKey: string;
+  reverse: boolean;
+}) => {
+  if (!sortKey) return tableData;
+
+  const sortedData = tableData.sort((a, b) => {
+    return a[sortKey] > b[sortKey] ? 1 : -1;
+  });
+
+  if (reverse) return sortedData.reverse();
+
+  return sortedData;
+};
+
+const TableContainer = ({
+  tableHeaderConfig,
+  tableData,
+}: TableContainerProps) => {
   const elementRef = useRef<Array<HTMLDivElement | null>>([]);
-  const intervalRef = useRef<number | null>(null);
-  const cursorRef = useRef<HTMLDivElement | null>(null);
 
-  // onMouseDown={() => {}}
-  // onTouchStart={() => {}}
-  const handleMouseDown = (index: number, e: any) => {
-    const clickedElementRef = elementRef.current[index];
+  const [sortKey, setSortKey] = useState<string>('phoneNumber');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('ascn');
+  const [isResizing, setResizing] = useState(false);
 
-    if (clickedElementRef) {
-      const elementRect = elementRef.current[index]?.getBoundingClientRect();
+  const sortedData = useCallback(
+    () => sortData({ tableData, sortKey, reverse: sortOrder === 'desc' }),
+    [tableData, sortData, sortKey, sortOrder]
+  );
 
-      // const clickDistanceFromLeft = e.pageX - elementRect.left;
+  const SortButton = ({
+    onClick,
+  }: {
+    sortOrder?: SortOrder;
+    columnKey?: string | number | boolean;
+    sortKey?: string | number | boolean;
+    onClick: any;
+  }) => (
+    <div
+      className='w-5 h-5 bg-red-300 cursor-pointer \0'
+      onClick={() => {
+        console.log('jjjjj');
 
-      console.log(
-        'Mouse click distance from the left edge:',
-        e.pageX,
-        elementRect?.left,
-        elementRect?.width
-      );
-    }
+        changeSort('ff');
+      }}
+    >
+      ^vvv
+    </div>
+  );
+
+  const changeSort = (key: string) => {
+    setSortOrder(sortOrder === 'ascn' ? 'desc' : 'ascn');
+    setSortKey(key);
   };
 
-  const startContinuousFunction = (index: number, e: any) => {
-    // const clickDistanceFromLeft = e.pageX - elementRect.left;
-    const elementRect = elementRef.current[index]?.getBoundingClientRect();
-
-    if (elementRect) {
-      const cursorDistanceFromLeft = e.pageX - elementRect?.left;
-      const cursorDistanceFromRight =
-        elementRect?.width - cursorDistanceFromLeft;
-
-      if (cursorDistanceFromLeft <= 2)
-        cursorRef.current?.classList.add('resize_icon_left');
-      else if (cursorDistanceFromRight <= 2)
-        cursorRef.current?.classList.add('resize_icon_right');
-      else
-        cursorRef.current?.classList.remove(
-          'resize_icon_left',
-          'resize_icon_right'
-        );
-
-      // console.log(
-      //   'Mouse click distance from the left edge:',
-      //   cursorDistanceFromLeft,
-      //   elementRect?.width
-      // );
-    }
+  const handleMouseDown = (indx: number) => {
+    // console.log(indx);
+    setResizing(true);
   };
 
-  const stopContinuousFunction = () => {
-    // Stop the continuous function when mouse is released
-    if (intervalRef.current !== null) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
+  const handleMouseMove = (e: any, index: number) => {
+    const currentCol = elementRef.current[index];
+
+    if (isResizing && currentCol) {
+      const currentColBounding = currentCol?.getBoundingClientRect();
+
+      const mouseDistanceFromLeftOfScreen = e.clientX;
+      const elementDistanceFromLeft = currentColBounding?.left;
+      const distanceFromLeftOfElement =
+        mouseDistanceFromLeftOfScreen - elementDistanceFromLeft;
+
+      currentCol.style.width = `${distanceFromLeftOfElement}px`;
+
+      console.log('distance from left', distanceFromLeftOfElement);
     }
   };
 
   return (
     <table className='w-full'>
-      <div className='custom-cursor' ref={cursorRef}>
-        <FaArrowsAltH />
-      </div>
       <thead>
         <tr className=''>
-          {tableColConfig.map((config, indx) => (
-            <th style={{ width: config.width }} className='' key={config.id}>
+          {tableHeaderConfig.map((config, indx) => (
+            <th
+              style={{ width: config.width }}
+              className='relative border-[1px] border-white'
+              key={config.id}
+              onMouseDown={(e) => handleMouseDown(indx)}
+              onMouseMove={(e) => handleMouseMove(e, indx)}
+              onMouseUp={() => {
+                setResizing(false);
+              }}
+              onClick={() => changeSort(config.value)}
+              ref={(el) => (elementRef.current[indx] = el)}
+            >
               {config.title}
-              <div
+              {/* <SortButton
+                columnKey={config.value}
+                onClick={() => changeSort(config.value)}
+                {...{ sortOrder, sortKey }}
+              /> */}
+              {/* <div
                 dir='ltr'
                 id='elem'
                 ref={(el) => (elementRef.current[indx] = el)}
                 onMouseDown={(e) => startContinuousFunction(indx, e)}
                 onMouseUp={stopContinuousFunction}
                 onMouseMove={(e) => startContinuousFunction(indx, e)}
-                className='w-[80%] relative mx-auto h-full bg-red-300'
+                className='absolute mx-auto h-full top-0 w-full '
               >
-                mmm
-              </div>
+               
+                <div
+                  className='custom-cursor absolute hidden'
+                  ref={(el) => (cursorRef.current[indx] = el)}
+                >
+                  <FaArrowsAltH />
+                </div>
+              </div> */}
             </th>
           ))}
         </tr>
       </thead>
 
       <tbody className='w-full'>
-        {tableData.map((data: any, indx: number) => (
+        {sortedData().map((data: any, indx: number) => (
           <tr key={indx}>
             {Object.keys(data).map((key) => (
               <td key={key} className='text-center'>
